@@ -2,6 +2,8 @@
 
 HEAT is a software for thermal cameras;\
 Hayabusa2&Hera Exploration Assistant for TIR&TIRI. \
+This software can visualize and calibrate Hayabusa2.\
+Hera data will be supported in the future.\
 This tool has four main functions.
 
 
