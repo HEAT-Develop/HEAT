@@ -77,6 +77,6 @@ brew install mysql@5.7
 * E-mail:heat-develop@u-aizu.ac.jp
 
 # License
-
-"HEAT" is under [LGPL3](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License).
+(c) 2022 The University of Aizu\
+This software is released under the GNU General Public License.
 
