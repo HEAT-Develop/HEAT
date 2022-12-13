@@ -67,6 +67,9 @@ After you install the necessary modules, you need to set the path.\
 Please refer to HEAT.pro for more information.
 
 # Usage
+#### Conversion
+![HEAT_3](https://user-images.githubusercontent.com/120307289/207309416-ced044d7-c2ef-493e-af02-96b1699c2a67.gif)
+
 #### Visualization of the Ryugu data
 ![HEAT](https://user-images.githubusercontent.com/120307289/207255328-e329bc87-37fb-4c2d-bb70-a66a0d7e5af8.gif)
 #### [Data](https://data.darts.isas.jaxa.jp/pub/pds4/data/hyb2/hyb2_tir/) published on Jaxa can be used in HEAT.
