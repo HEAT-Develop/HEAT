@@ -10,7 +10,7 @@ This software can do below things.
 1. To convert TIR DN image to temperature one.
 1. To use TIR database (ground test & obserbation)
 
-**Hera/TIRI data will be supported in the future.**
+***Hera/TIRI data will be supported in the future.***
 
 
 
@@ -27,10 +27,10 @@ This software can do below things.
 #### Windows and Linux will be supported in the next update.
 ### MacOS
 - OS
-  - MaCOS
+  - MacOS
     - Bigsur, Catalina, Mojave
-- Xcode graeter than 11
-  -C++ 11
+- [Xcode](https://developer.apple.com/jp/xcode/) graeter than 11
+  - C++ 11
 - [Qt](https://www.qt.io) 5.14
 - [Homebrew](https://brew.sh/index)
 - [cfitsio](https://heasarc.gsfc.nasa.gov/fitsio/) 2.6
@@ -62,6 +62,10 @@ brew install cspice
 brew install mysql@5.7
 ```
 
+The PRO file is the file that makes up the project.\
+After you install the necessary modules, you need to set the path.\
+Please refer to HEAT.pro for more information.
+
 # Usage
 #### Visualization of the Ryugu data
 ![HEAT](https://user-images.githubusercontent.com/120307289/207255328-e329bc87-37fb-4c2d-bb70-a66a0d7e5af8.gif)
@@ -74,6 +78,7 @@ brew install mysql@5.7
 * To use the database and calibration functions, a separate database file is required. Please contact us if you need one.
 * Other referenced files must be included in the application.
 ![HEAT_2](https://user-images.githubusercontent.com/120307289/207267548-eee94df1-8d87-47b9-9aa0-724e6e46f415.gif)
+* If you get the message "QMYSQL driver not loaded", you need to read [official web page](https://doc.qt.io/qt-6/sql-driver.html) and configure the driver. However, if you do not use the database function, you do not need to configure it.
 
 # Contacts
 * E-mail:heat-develop@u-aizu.ac.jp
