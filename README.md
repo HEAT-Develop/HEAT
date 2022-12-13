@@ -84,6 +84,6 @@ Please refer to HEAT.pro for more information.
 * E-mail:heat-develop@u-aizu.ac.jp
 
 # License
-(c) 2022 The University of Aizu\
-This software is released under the GNU General Public License.
+(c) 2022 [The University of Aizu](https://u-aizu.ac.jp/)\
+This software is released under the [GNU General Public License](https://en.wikipedia.org/wiki/GNU_General_Public_License).
 
