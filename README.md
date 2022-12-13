@@ -1,8 +1,11 @@
 # HEAT
 
-HEAT is a software for thermal cameras;
+HEAT is a software for thermal cameras;\
 Hayabusa2&Hera Exploration Assistant for TIR&TIRI. \
 This tool has four main functions.
+
+
+
 
 ![HEAT_functions](https://user-images.githubusercontent.com/120307289/207242713-ccd678da-c9e2-49db-b355-d5759525cd2a.png)
 
@@ -57,6 +60,8 @@ brew install mysql@5.7
 
 * Qt cannot be installed without installing XCode in MacOS.
 * To use the database and calibration functions, a separate database file is required. Please contact us if you need one.
+* Other referenced files must be included in the application.
+![HEAT_2](https://user-images.githubusercontent.com/120307289/207267548-eee94df1-8d87-47b9-9aa0-724e6e46f415.gif)
 
 # Contacts
 * E-mail:heat-develop@u-aizu.ac.jp
@@ -64,3 +69,4 @@ brew install mysql@5.7
 # License
 
 "HEAT" is under [LGPL3](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License).
+
