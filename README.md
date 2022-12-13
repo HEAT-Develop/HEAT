@@ -2,9 +2,15 @@
 
 HEAT is a software for thermal cameras;\
 Hayabusa2&Hera Exploration Assistant for TIR&TIRI. \
-This software can visualize and calibrate Hayabusa2.\
-Hera data will be supported in the future.\
-This tool has four main functions.
+
+This software can do below things.
+
+1. To display TIR images and thermal models 
+1. To calibrate TIR interactively
+1. To convert TIR DN image to temperature one.
+1. To use TIR database (ground test & obserbation)
+
+*Hera/TIRI data will be supported in the future.*
 
 
 
@@ -18,6 +24,8 @@ This tool has four main functions.
 ![HEAT_SS_cal](https://user-images.githubusercontent.com/120307289/207242527-45f90848-bf7b-4212-869f-71e5637efae2.png)
 
 # Requirement
+#### Windows and Linux will be supported in the next update.
+### MacOS
 - OS
   - MaCOS
     - Bigsur, Catalina, Mojave
@@ -29,7 +37,7 @@ This tool has four main functions.
 - ccfits 4.1
 - MySQL 5.7
 
-#### Windows and Linux will be supported in the next update.
+
 
 # Installation
 
