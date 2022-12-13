@@ -1,7 +1,7 @@
 # HEAT
 
 HEAT is a software for thermal cameras;\
-Hayabusa2&Hera Exploration Assistant for TIR&TIRI. \
+*Hayabusa2&Hera Exploration Assistant for TIR&TIRI.*
 
 This software can do below things.
 
