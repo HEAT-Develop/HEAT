@@ -10,7 +10,7 @@ This software can do below things.
 1. To convert TIR DN image to temperature one.
 1. To use TIR database (ground test & obserbation)
 
-*Hera/TIRI data will be supported in the future.*
+**Hera/TIRI data will be supported in the future.**
 
 
 
@@ -31,11 +31,12 @@ This software can do below things.
     - Bigsur, Catalina, Mojave
 - Xcode graeter than 11
   -C++ 11
-- Qt 5.14
-- Homebrew
-- cfitsio 2.6
-- ccfits 4.1
-- MySQL 5.7
+- [Qt](https://www.qt.io) 5.14
+- [Homebrew](https://brew.sh/index)
+- [cfitsio](https://heasarc.gsfc.nasa.gov/fitsio/) 2.6
+- [ccfits](https://heasarc.gsfc.nasa.gov/fitsio/ccfits/) 4.1
+- [Spice tool kit](https://naif.jpl.nasa.gov/naif/toolkit.html)
+- [MySQL](https://www.mysql.com/) 5.7
 
 
 
@@ -57,6 +58,7 @@ Read [official website](https://brew.sh/index) carefully and install it.
 ```bash
 brew install cfitsio
 brew install ccfits
+brew install cspice
 brew install mysql@5.7
 ```
 
