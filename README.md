@@ -12,8 +12,8 @@ This software does follows;
 
 ***Hera/TIRI data will be supported in the future.***
 
-
-
+# Release notes
+2022.12.18 HEAT ver 1.0 has been released.
 
 ![HEAT_functions](https://user-images.githubusercontent.com/120307289/207242713-ccd678da-c9e2-49db-b355-d5759525cd2a.png)
 
