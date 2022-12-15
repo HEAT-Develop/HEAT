@@ -1,6 +1,6 @@
 # HEAT
 
-HEAT is a software package for thermal cameras;\
+HEAT is opensource software on Qt for thermal camera "TIR" on Hayabusa2.\
 *Hayabusa2 Exploration Assistant for TIR*
 
 This software does follows;
@@ -12,10 +12,10 @@ This software does follows;
 
 ***Hera/TIRI data will be supported in the future.***
 
+![HEAT_functions](https://user-images.githubusercontent.com/120307289/207242713-ccd678da-c9e2-49db-b355-d5759525cd2a.png)
+
 # Release notes
 2022.12.18 HEAT ver 1.0 has been released.
-
-![HEAT_functions](https://user-images.githubusercontent.com/120307289/207242713-ccd678da-c9e2-49db-b355-d5759525cd2a.png)
 
 # ScrennShots
 #### Database and Visualization
