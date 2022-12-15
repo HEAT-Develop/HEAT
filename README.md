@@ -1,14 +1,14 @@
 # HEAT
 
 HEAT is a software package for thermal cameras;\
-*Hayabusa2&Hera Exploration Assistant for TIR&TIRI.*
+*Hayabusa2 Exploration Assistant for TIR*
 
-This software can do below things.
+This software does follows;
 
 1. To display TIR images and thermal models 
 1. To calibrate TIR interactively
-1. To convert TIR DN image to temperature one.
-1. To use TIR database (ground test & obserbation)
+1. To convert TIR DN image to temperature one
+1. To colablate TIR database (ground test & flight data)
 
 ***Hera/TIRI data will be supported in the future.***
 
