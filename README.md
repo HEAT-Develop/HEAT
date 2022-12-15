@@ -17,7 +17,7 @@ This software does follows;
 # Release notes
 2022.12.18 HEAT ver 1.0 has been released.
 
-# ScrennShots
+# ScreenShots
 #### Database and Visualization
 ![HEAT_SS_all](https://user-images.githubusercontent.com/120307289/207242524-04d970ad-c9de-491d-b1b2-125c2d818449.png)
 #### Calibration
