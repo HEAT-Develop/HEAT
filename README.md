@@ -31,7 +31,7 @@ This software does follows;
     - Bigsur, Catalina, Mojave
 - [Xcode](https://developer.apple.com/jp/xcode/) greater than 11
   - C++ 11
-- [Qt](https://www.qt.io) 5.14 is preferable. (Version 5 is available.)
+- [Qt](https://www.qt.io) 5.13 is preferable.
 - [Homebrew](https://brew.sh/index)
 - [cfitsio](https://heasarc.gsfc.nasa.gov/fitsio/)
 - [ccfits](https://heasarc.gsfc.nasa.gov/fitsio/ccfits/)
@@ -46,9 +46,9 @@ This software does follows;
 Install from App Store.\
 C++ is also installed at the install.
 
-#### Qt 5.14
+#### Qt 5.13
 Install from [official web site](https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4) and launch the online installer.\
-Select Qt 5.14 and QtCreator in the installer.
+Select Qt 5.13 and QtCreator in the installer.
 
 #### Homebrew
 Read [official website](https://brew.sh/index) and install it.
@@ -81,7 +81,9 @@ Plese read HEAT.pro as reference.
 * Please move src files to HEAT application.
 ![HEAT_2](https://user-images.githubusercontent.com/120307289/207267548-eee94df1-8d87-47b9-9aa0-724e6e46f415.gif)
 * The message "QMYSQL driver not loaded" tell us to configure the driver. Please read [official web page](https://doc.qt.io/qt-6/sql-driver.html).
+* On Qt 5.14, there is a bug that prevents the app from displaying.
 * In case you would like to verify and/or customize calibration procedures, you need additional database of ground tests. Please contact us if you need one.
+
 
 # Contact
 * E-mail: heat-develop@u-aizu.ac.jp
