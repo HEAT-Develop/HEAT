@@ -16,7 +16,7 @@ This software does follows;
 
 # Release notes
 2022.12.18 HEAT ver 1.0 has been released.
-2022.03.19 HEAT ver 1.5 has been released.
+2023.03.19 HEAT ver 1.5 has been released.
 
 # ScreenShots
 #### Database and Visualization
