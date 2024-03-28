@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+//
+// Copyright (c) 2021 The University of Aizu
+// Open source under the BSD License.
+//
+ -->
+<ui version="4.0">
+ <class>VtkModel</class>
+ <widget class="QDialog" name="VtkModel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>327</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="VtkRendering" name="vtkRender">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>491</width>
+     <height>276</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="vtkList">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>30</y>
+     <width>201</width>
+     <height>251</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="loadVtkButton">
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>0</y>
+     <width>211</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load vtk from directory</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>290</y>
+     <width>701</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Data </string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="vtkDataSelect">
+      <item>
+       <property name="text">
+        <string>Tempareture</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Directflux</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Radiationflux</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Viewfactor</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Color</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="colorSelect">
+      <item>
+       <property name="text">
+        <string>Rainbow</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Gray scale</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Iron</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Change range</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Min</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="setMin"/>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>to Max</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="setMax"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="applyButton">
+      <property name="text">
+       <string>Apply</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VtkRendering</class>
+   <extends>QOpenGLWidget</extends>
+   <header>vtkrendering.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

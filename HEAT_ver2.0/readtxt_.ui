@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>581</width>
+    <height>529</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>281</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Data type</string>
+   </property>
+   <widget class="QRadioButton" name="radioButton0_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>251</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TIR Data</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton1_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>251</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RoughnessModel Data</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="oneExtractDataButton">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>376</y>
+     <width>171</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>One Data extraction</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="readIniButton">
+   <property name="geometry">
+    <rect>
+     <x>379</x>
+     <y>40</y>
+     <width>161</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Read .ini File</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="errlb">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>70</y>
+     <width>281</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tmcntlb">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>520</y>
+     <width>581</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="polygonidTxt">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>380</y>
+     <width>113</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="maxLength">
+    <number>6</number>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="FolderPathTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>110</y>
+     <width>551</width>
+     <height>41</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="FolderDlgOpenpushButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>211</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Read data from directory</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="extractDataButton">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>270</y>
+     <width>171</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>All Data extraction</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="inDataBaseButton">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>220</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Register in database</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>551</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Group name of the Data (Maximum 20 characters) </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>561</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>First part of the file name(Only files with txt/TXT extension are eligible)</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="GroupcomboBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>40</y>
+     <width>271</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="editable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="FirstPartTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>180</y>
+     <width>211</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="outPutButton">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>380</y>
+     <width>171</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Output best fit</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="proclb">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>300</y>
+     <width>281</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Processing now</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="showDataButton">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>350</y>
+     <width>171</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show best fit </string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="ShowtextEdit">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>420</y>
+     <width>521</width>
+     <height>91</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>350</y>
+     <width>291</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PolygonID (1-196608)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
