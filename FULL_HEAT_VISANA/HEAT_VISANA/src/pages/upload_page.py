@@ -69,9 +69,9 @@ class UploadPage(QWidget):
         self.new_vtk_file_name = ""
 
     def model_in_dataBase(self):
-        model_spc_49k = "HEAT_VISANA/src/models/spc_49k_model.vtk"
-        model_spc_200k = "HEAT_VISANA/src/models/spc_200k_model.vtk"
-        model_spc_800k = "HEAT_VISANA/src/models/spc_800k_model.vtk"
+        model_spc_49k = "Application_code/src/models/spc_49k_model.vtk"
+        model_spc_200k = "Application_code/src/models/spc_200k_model.vtk"
+        model_spc_800k = "Application_code/src/models/spc_800k_model.vtk"
         dic = {model_spc_49k:"spc_49k_model.vtk",
                model_spc_200k:"spc_200k_model.vtk",
                model_spc_800k:"spc_800k_model.vtk" }
@@ -244,7 +244,7 @@ class UploadPage(QWidget):
         
         base_name = os.path.basename(self.new_csv_file_name)
         vtk_file_name, csv_file_extension_not_usful = os.path.splitext(base_name)
-        vtk_paths = "HEAT_VISANA/src/files/vtk_converted_files/"
+        vtk_paths = "Application_code/src/files/vtk_converted_files/"
         self.new_vtk_file_name = f"{vtk_paths}{vtk_file_name}_{self.chooseModel_csv}.vtk"
     
         combine_vtk_csv(self.model, self.new_csv_file_name,self.new_vtk_file_name )
@@ -274,7 +274,7 @@ class UploadPage(QWidget):
             file_name_csv, file_extension = os.path.splitext(base_name)
             print("File csv name: ",file_name_csv)
 
-            paths = "HEAT_VISANA/src/files/csvfiles/full_csv/"
+            paths = "Application_code/src/files/csvfiles/full_csv/"
             self.new_csv_file_name = f"{paths}{file_name_csv}_{self.chooseModel_csv}.csv"
             print("New csv name:", self.new_csv_file_name)
             csv_long(filename,self.new_csv_file_name , self.chooseModel_csv)

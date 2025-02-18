@@ -9,10 +9,10 @@ import os
 from functools import partial
 import sys
 
-module_path = 'HEAT_VISANA'
+module_path = 'Application_code'
 if module_path not in sys.path:
     sys.path.append(module_path)
-db_path  = "HEAT_VISANA/db/db.py"
+db_path  = "Application_code/db/db.py"
 
 if not os.path.exists(db_path):
     raise FileNotFoundError(f"Error: 'db.py' not found at {db_path}")
@@ -55,7 +55,7 @@ class TimePage(QWidget):
         
              
     def initUI(self):
-        self.load_css('HEAT_VISANA/src/style/multiview.css') 
+        self.load_css('Application_code/src/style/multiview.css') 
         print(os.path.abspath('src/style/multiview.css'))
         
 

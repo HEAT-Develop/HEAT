@@ -44,7 +44,7 @@ class MultiviewPage(QWidget):
     def initUI(self):
     
         
-        self.load_css('HEAT_VISANA/src/style/multiview.css') 
+        self.load_css('Application_code/src/style/multiview.css') 
         print(os.path.abspath('src/style/multiview.css'))
         
         layout = QVBoxLayout(self)
