@@ -1,0 +1,82 @@
+QPushButton {
+    background-color: rgba(0, 125, 255, 1);  /* Blue background for buttons */
+    color: white;  /* White text for buttons */
+    border: 2px solid rgba(0, 125, 255, 1);  /* Border with width, style, and color */
+    padding: 5px;  /* Padding inside buttons */
+    text-align: center;  /* Center text */
+    text-decoration: none;  /* No underline */
+    border-radius: 15px;  /* Rounded corners */
+    width: 100%;
+}
+
+QPushButton:hover {
+    background-color: white;  /* Background color on hover */
+    color: rgba(0, 125, 255, 1);  /* Text color on hover */
+}
+QPushButton:pressed {
+    background-color: white;  /* Background color on hover */
+    color: rgba(0, 125, 255, 1);  /* Text color on hover */
+}
+QPushButton:disabled{
+    background-color: white;
+    color: rgba(0, 125, 255, 1);
+}
+
+
+
+
+QComboBox QAbstractItemView {
+
+    background-color: white;  /* Set background color */
+    padding-top: 5px;
+
+
+}
+QLabel{
+    background-color:rgba(0, 125, 255, 1) ;
+    color: white;
+    padding: 5px;
+    border: 2px solid rgba(0, 125, 255, 1);
+    border-radius: 15px;
+}
+
+QLabel#title {
+    color: white;
+    min-width: 220px;
+    border: 3px solid rgba(0, 125, 255, 1);
+    border-radius: 15px;
+
+
+}
+
+QFrame#resultsRow {
+    background-color: rgba(0, 125, 255, 1);
+    color: white;
+    border: 3px solid rgba(0, 125, 255, 1);
+    border-radius: 15px;
+    height:min-content;
+    width: max-content;
+
+
+
+}
+QInputDialog{
+
+    background-color: rgba(0,125,255,1);
+
+           
+}
+QInputDialog QLabel {
+    color: white;
+    background-color: rgba(0,125,255,1);
+}
+
+
+QFrame#resultsRow QLabel {
+    border: none;       /* so each label doesn't have its own border */
+    border: 3px solid rgba(0, 125, 255, 1);
+    color: white;
+    text-align: left;
+    min-width: 200px;
+
+}

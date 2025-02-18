@@ -1,0 +1,38 @@
+QPushButton {
+    background-color: rgba(0, 125, 255, 1);  /* Blue background for buttons */
+    color: white;  /* White text for buttons */
+    border: 2px solid rgba(0, 125, 255, 1);  /* Border with width, style, and color */
+    padding: 5px;  /* Padding inside buttons */
+    text-align: center;  /* Center text */
+    text-decoration: none;  /* No underline */
+    border-radius: 15px;  /* Rounded corners */
+}
+QPushButton:hover {
+    background-color: white;  /* Background color on hover */
+    color: rgba(0, 125, 255, 1);  /* Text color on hover */
+}
+QPushButton:pressed {
+    background-color: white;  /* Background color on hover */
+    color: rgba(0, 125, 255, 1);  /* Text color on hover */
+}
+
+
+
+
+
+QComboBox QAbstractItemView {
+
+    background-color: white;  /* Set background color */
+    padding-top: 5px;
+
+
+}
+QLabel{
+    width: 45px;
+    background-color:rgba(0, 125, 255, 1) ;
+    color: white;
+    padding: 5px;
+    border: 2px solid rgba(0, 125, 255, 1);
+    border-radius: 15px;
+}
+
