@@ -6,8 +6,8 @@ from mysql.connector import Error
 class DataBase():
 
     def __init__(self):
-        self.user = ""
-        self.password = ""
+        self.user = "root"
+        self.password = "HEAT1738"
         self.host = "localhost"
         try:
             mydb = mysql.connector.connect(   
