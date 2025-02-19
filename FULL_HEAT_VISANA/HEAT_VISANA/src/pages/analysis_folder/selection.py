@@ -26,7 +26,7 @@ from qtconsole.manager import QtKernelManager
 module_path = 'HEAT_VISANA'
 if module_path not in sys.path:
     sys.path.append(module_path)
-db_path = "HEAT_VISANA/db/db.py"
+db_path = "FULL_HEAT_VISANA/HEAT_VISANA/db/db.py"
 
 if not os.path.exists(db_path):
     raise FileNotFoundError(f"Error: 'db.py' not found at {db_path}")
@@ -492,7 +492,7 @@ class Selections(QWidget):
 
 
     def initUI(self):
-        self.load_css('HEAT_VISANA/src/style/multiview.css') 
+        self.load_css('FULL_HEAT_VISANA/HEAT_VISANA/src/style/multiview.css') 
 
         main_layout = QHBoxLayout(self)
         left_layout = QVBoxLayout()

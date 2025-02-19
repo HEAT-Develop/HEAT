@@ -56,7 +56,7 @@ class AnalysisPage(QMainWindow):
         
         button_layout.addItem(left_spacer)
 
-        script_dir = "Application_code"
+        script_dir = "FULL_HEAT_VISANA/HEAT_VISANA"
         icon_dir = os.path.join(script_dir, "src", "images")
         print(script_dir)
         icon_size = 30  # Change this size as necessary

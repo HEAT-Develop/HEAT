@@ -13,7 +13,7 @@ dbInsert = db_instance.insert_new_rigion
 filename = "rigions_analysis_functions.py"
 
 search_paths = [
-    "Application_code/src/pages/analysis_folder",
+    "src/pages/analysis_folder",
 
 ]
 
@@ -38,7 +38,7 @@ class Regions(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.load_css('Application_code/src/style/analysis.css') 
+        self.load_css('FULL_HEAT_VISANA/HEAT_VISANA/src/style/analysis.css') 
         print(os.path.abspath('src/style/analysis.css'))
         
         
