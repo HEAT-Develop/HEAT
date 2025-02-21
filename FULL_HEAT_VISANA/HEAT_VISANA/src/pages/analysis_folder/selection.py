@@ -177,7 +177,7 @@ class RigionType():
         base_data = []
         region = 0 
         print(len(all_files))
-        for i in range (2):
+        for i in range (len(all_files)):#(2):
                 mesh = pv.read(all_files[i]) 
                 print(f"Processing file {all_files[i]}, {i}...")
         
