@@ -1070,7 +1070,7 @@ class Selections(QWidget):
         model_size = self.model_size_combo.currentText()
 
         file = db_instance.get_name(year, month, day, hour, minute, second, model, model_size)
-        
+        print(year, month, day, hour, minute, second, model, model_size )
         print(file)
         if file:
             self.mesh = pv.read(file[0])
