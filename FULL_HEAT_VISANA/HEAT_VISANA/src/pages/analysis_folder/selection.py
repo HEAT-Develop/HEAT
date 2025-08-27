@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QFileDialog
 from PyQt6.QtCore import Qt
 
-from PyQt6.QtWidgets import QLabel, QApplication,QMessageBox, QPushButton, QVBoxLayout, QWidget, QHBoxLayout,QDateTimeEdit, QComboBox, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QApplication,QMessageBox,QLineEdit, QPushButton, QVBoxLayout, QWidget, QHBoxLayout,QDateTimeEdit, QComboBox, QSizePolicy
 from PyQt6.QtCore import Qt,QDateTime
 import sys
 from pyvistaqt import BackgroundPlotter,QtInteractor
@@ -26,7 +26,7 @@ from qtconsole.manager import QtKernelManager
 module_path = 'HEAT_VISANA'
 if module_path not in sys.path:
     sys.path.append(module_path)
-db_path = "FULL_HEAT_VISANA/HEAT_VISANA/db/db.py"
+db_path = "HEAT_VISANA/db/db.py"
 
 if not os.path.exists(db_path):
     raise FileNotFoundError(f"Error: 'db.py' not found at {db_path}")
@@ -43,7 +43,8 @@ class RigionType():
         self.model_type = str # Model Type
         self.model_size = str # Model Size
         self.rigion_date = str # Date of file
-        self.unstructuredg_rid = pv.UnstructuredGrid # CELL ID
+        self.unstructuredg_rid = pv.UnstructuredGrid
+
         # Points(x,y,z)
         self.save_as_vtk = None # file path of selection saved
         self.cell_ids = []
@@ -177,7 +178,7 @@ class RigionType():
         base_data = []
         region = 0 
         print(len(all_files))
-        for i in range (len(all_files)):#(2):
+        for i in range (2):
                 mesh = pv.read(all_files[i]) 
                 print(f"Processing file {all_files[i]}, {i}...")
         
@@ -282,7 +283,6 @@ class RigionType():
      
         print("created correctly")
     
-
     def create_vtk(self):
         
         print("This is here: ",self.unstructuredg_rid)
@@ -398,15 +398,14 @@ class PyVistaWidget(QWidget):
         self.plotter = QtInteractor(self)
         self.layout.addWidget(self.plotter.interactor)
         self.setLayout(self.layout)
-        
-        
+              
     def update_plot(self, mesh,d):
         self.plotter.clear()
         curvature = mesh.curvature(curv_type='mean')
         mesh.point_data['Curvature'] = curvature
         self.plotter.add_mesh(mesh,show_edges=False,cmap='coolwarm',scalars='Curvature')
         self.plotter.update()
-
+        
 def create_ipython_widget():
 
     ipython_widget = RichJupyterWidget()
@@ -492,7 +491,7 @@ class Selections(QWidget):
 
 
     def initUI(self):
-        self.load_css('FULL_HEAT_VISANA/HEAT_VISANA/src/style/multiview.css') 
+        self.load_css('HEAT_VISANA/src/style/multiview.css') 
 
         main_layout = QHBoxLayout(self)
         left_layout = QVBoxLayout()
@@ -505,6 +504,8 @@ class Selections(QWidget):
         self.mesh = None
 
         header_layout = QHBoxLayout()
+        self.update__your_model = QPushButton("Update Your Model")
+
         self.date_time_edit = QDateTimeEdit(QDateTime.currentDateTime())
         self.model_type_combo = QComboBox()
         self.model_size_combo = QComboBox()
@@ -538,7 +539,9 @@ class Selections(QWidget):
 
                 #----END----#
 
-
+                #---ADD=MODEL--#
+        self.update__your_model.clicked.connect(self.upload_model)
+                #=---END---=#
                 #-SEND-DATE-#
         self.btn_send_date.clicked.connect(self.send_date)
                 #----END----#
@@ -546,23 +549,34 @@ class Selections(QWidget):
                 #-SCALAR-DATA-#
         self.scalar_type_combo.currentIndexChanged.connect(self.updateVisualizationType)
                 #----END----#
-
+        header_layout.addWidget(self.update__your_model)
         header_layout.addWidget(self.date_time_edit)
         header_layout.addWidget(self.model_type_combo)
         header_layout.addWidget(self.model_size_combo)
         header_layout.addWidget(self.btn_send_date)
         header_layout.addWidget(self.scalar_type_combo)
                 #---END---#
-
+        
         sub_header_layout = QHBoxLayout()
+        self.search_lat = QLineEdit(self)
+        self.search_lon = QLineEdit(self)
+        self.search_btn = QPushButton("Search", self)
+
         self.btn_new_selection = QPushButton()
         self.btn_select_ID = QComboBox()
         self.btn_reset = QPushButton("Clean selection")
+        
+        sub_header_layout.addWidget(self.search_lat)
+        sub_header_layout.addWidget(self.search_lon)
+        sub_header_layout.addWidget(self.search_btn)
 
         sub_header_layout.addWidget(self.btn_new_selection)
         #sub_header_layout.addWidget(self.btn_select_ID)
         sub_header_layout.addWidget(self.btn_reset)
 
+            #---SEARCH---#
+        self.search_btn.clicked.connect(self.search_coordinates)
+            #------END----#
             #-NEW-SELECTION-#
         self.btn_new_selection.setText("Start a New Selection")
         self.btn_new_selection.clicked.connect(self.new_selection)
@@ -649,7 +663,56 @@ class Selections(QWidget):
 
         self.setLayout(main_layout)
 
+    def search_coordinates(self):
 
+        sel_lat = self.search_lat.text().strip()
+        sel_lon = self.search_lon.text().strip()
+
+        sel_lat = sel_lat.replace("\u2212", "-")
+        sel_lon = sel_lon.replace("\u2212", "-")
+
+        print("This is sel_lat: ",sel_lat, " is type ", type(sel_lat) )
+        print("This is sel_lon: ",sel_lon, " is type ", type(sel_lon))
+
+        if self.mesh is None:
+            print("No valid mesh loaded. Load a mesh before starting selection.")
+            return
+        if isinstance(self.mesh, pv.MultiBlock):
+            self.mesh = self.mesh[0] if self.mesh.n_blocks > 0 else None
+
+        if not self.mesh or self.mesh.n_cells == 0:
+            print("The mesh is invalid or has no cells.")
+            return
+
+        
+        self.clear_selection_dot()
+
+        for idx, (lat, lon) in enumerate(zip(self.mesh["latitude"], self.mesh["longitude"])):
+            lat_str = f"{lat:.15f}"
+            lon_str = f"{lon:.15f}"
+
+            if lat_str.startswith(sel_lat) and lon_str.startswith(sel_lon):
+                print(f"Match found in cell {idx}:")
+                print(f"  mesh latitude = {lat_str}")
+                print(f"  mesh longitude = {lon_str}")
+
+                self.mesh.clear_cell_data()
+                single_cell = self.mesh.extract_cells([idx])
+                center = single_cell.center
+                sphere = pv.Sphere(radius=0.11, center=center)
+                self.selection_actor = self.view.plotter.add_mesh(
+                    sphere,
+                    color='red',
+                    #name='selection_dot',
+                    smooth_shading=True
+                )
+                self.view.plotter.render()
+                break
+        else:
+            print(f"No mesh cell whose first {len(sel_lat)} digits of latitude\n"
+                f"and first {len(sel_lon)} digits of longitude\n"
+                f"match “{sel_lat}” / “{sel_lon}”.")
+    
     # -----------IPython-Console-Helpers------------
     def toggle_console(self):
         if self.console_expanded:
@@ -664,6 +727,7 @@ class Selections(QWidget):
     def refresh_plot(self):
         
         self.plot()
+    
     def plot_console_data(self, x, y, values, label="Console Data"):
      
         self.ax.clear()
@@ -684,6 +748,7 @@ class Selections(QWidget):
         self.ax.set_ylabel("Y data")
 
         self.canvas.draw()
+    
     def push_to_console(self, var_dict):
         if not self.console:
             return
@@ -706,7 +771,6 @@ class Selections(QWidget):
         self.console.kernel_client.execute("simple_var = 42")
         self.console.kernel_client.execute('print("simple_var set to", simple_var)')
 
-
     def test_console_execution(self):
   
         if not self.console:
@@ -725,15 +789,13 @@ class Selections(QWidget):
 
     #------------DOWNLAD CSV---------------------#
 
-
     def download_csv(self):
         print("CELLIDS ",self.rigion_type.cell_ids)
         self.rigion_type.all_similar_rigions_data()
 
-
     #------------END-------------------#
 
-        #---------NEW-SELECTION--------#
+    #---------NEW-SELECTION--------#
     
     def new_selection(self):
         if not self.selecting:
@@ -759,34 +821,60 @@ class Selections(QWidget):
         except Exception as e:
             print(f"Error while stopping selection: {e}")
 
+    def clear_selection_dot(self):
+        if hasattr(self, 'selection_actor') and self.selection_actor is not None:
+            # this calls through to Plotter.remove_actor(actor)
+            self.view.plotter.remove_actor(self.selection_actor)
+            self.selection_actor = None
+            self.view.plotter.render()
+    
     def start_selection(self):
+        # 1) If self.mesh is a MultiBlock, grab its first block.
         if self.mesh is None:
             print("No valid mesh loaded. Load a mesh before starting selection.")
             return
 
         if isinstance(self.mesh, pv.MultiBlock):
-            self.mesh = self.mesh[0] if self.mesh.n_blocks > 0 else None
+            # Replace self.mesh with its 0th block (or whichever sub-mesh you mean to pick on)
+            if self.mesh.n_blocks > 0:
+                self.mesh = self.mesh[0]
+            else:
+                self.mesh = None
 
-        if not self.mesh or self.mesh.n_cells == 0:
+        # 2) Now `self.mesh` is either None or a "real" PolyData/UnstructuredGrid,
+        #    so it's safe to ask `.n_cells`.
+        if self.mesh is None or self.mesh.n_cells == 0:
             print("The mesh is invalid or has no cells.")
             return
+
+        # 3) Clear any existing actors so PyVista's picker isn't confused by multiple pickable actors.
         self.view.plotter.clear()
+
+        # 4) Compute curvature (optional—only if you want to visualize curvature)
         curvature = self.mesh.curvature(curv_type='mean')
         clamped_curvature = np.clip(curvature, -100, 200)
         self.mesh.point_data['Curvature'] = clamped_curvature
 
-        self.view.plotter.add_mesh(self.mesh,  show_edges=False,cmap='coolwarm',scalars='Curvature')
+        # 5) Add exactly one mesh actor, marked pickable=True.
+        #    If you want to color-map curvature, pass `scalars='Curvature'` and a colormap.
+        self.view.plotter.add_mesh(
+            self.mesh,
+            show_edges=False,
+            cmap='coolwarm',
+            scalars='Curvature',
+            pickable=True
+        )
+        self.view.plotter.render()
 
-        
-
+        # 6) Enable cell picking. Because there is only one mesh actor,
+        #    PyVista will never try to copy a None submesh.
         try:
             self.view.plotter.enable_cell_picking(
                 callback=self.callback_cell_pick,
                 through=False,
                 show_message=False,
-                color="blue",
+                color="blue",   # PyVista will highlight picked cells in blue
                 start=True
-         
             )
             print("Cell picking enabled.")
         except Exception as e:
@@ -836,7 +924,11 @@ class Selections(QWidget):
         filtered_mesh = self.mesh.extract_cells(self.selected_cells)
         surface_mesh = filtered_mesh.extract_surface()
 
-        self.view.plotter.add_mesh(surface_mesh, color="blue", show_edges=True)
+        curvature = self.mesh.curvature(curv_type='mean')
+        clamped_curvature = np.clip(curvature, -100, 200)
+        self.mesh.point_data['Curvature'] = clamped_curvature
+
+        self.view.plotter.add_mesh(surface_mesh, show_edges=True,cmap='coolwarm',scalars='Curvature', )
 
         self.update_region_data(surface_mesh, unstructuredg_rid)
 
@@ -1041,7 +1133,6 @@ class Selections(QWidget):
                         facecolor='none', edgecolor='red', s=40)
         self.canvas.draw()
 
-
     #--------------END------------#
     #------------UPDATE-PLOT------#
     def update(self):
@@ -1049,12 +1140,24 @@ class Selections(QWidget):
     #------------END--------------#
     #---------DOWNLAOD-VTK---------#
     def download_vtk(self):
-        vtk_filename = 'filtered_mesh.vtk'
+        vtk_filename = 'NNOONwdnqd.vtk'
         self.rigion_type.write_vtk_polydata(vtk_filename)
-
+        
     #-------------END--------------#
 
+    #---------UPLOAD-MODEL--------#
+    def upload_model (self):
 
+    
+        file_filter = "Mesh Files (*.vtk *.vtp *.stl *.ply *obj);;All Files (*)"
+        filename, _ = QFileDialog.getOpenFileName(self, "Open Mesh File", "", file_filter)
+        if filename:
+            self.mesh = pv.read(filename)
+            print(self.mesh)
+            self.view.plotter.add_mesh(self.mesh)
+
+        
+    #-----------END-=-------------#
 
     #-----------SEND-DATA----------#
     def send_date(self):
@@ -1070,7 +1173,7 @@ class Selections(QWidget):
         model_size = self.model_size_combo.currentText()
 
         file = db_instance.get_name(year, month, day, hour, minute, second, model, model_size)
-        print(year, month, day, hour, minute, second, model, model_size )
+        
         print(file)
         if file:
             self.mesh = pv.read(file[0])

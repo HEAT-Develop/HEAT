@@ -8,7 +8,14 @@ from sklearn.decomposition import PCA
 from scipy.optimize import minimize
 from scipy.interpolate import griddata
 
- 
+from scipy.spatial.distance import cdist
+from scipy.spatial import ConvexHull
+
+import vtk
+
+# from .compute_volume import compute_volume_of_region as cvor
+# from .compute_volume import debug_volume_check as dvc
+from .apbt import trace_boundary
 
 class MeshLoader:
 
@@ -194,14 +201,65 @@ class MeshAnalyzer:
        
         return np.mean(points, axis=0)
 
-    def find_vertical_intersection(self, start_point):
+    # def find_vertical_intersection(self, start_point):
       
-        direction = np.array([0, 0, -1])
-        end_point = start_point + direction * 1000
-        pts, _ = self.mesh.ray_trace(start_point, end_point)
-        if len(pts) == 0:
-            raise ValueError("No intersection found downward from the start_point.")
-        return pts[0]
+    #     direction = np.array([0, 0, -1])
+    #     end_point = start_point + direction * 1000
+    #     pts, _ = self.mesh.ray_trace(start_point, end_point)
+    #     if len(pts) == 0:
+    #         raise ValueError("No intersection found downward from the start_point.")
+    #     return pts[0]
+
+    def find_vertical_intersection(self, start_point):
+        """
+        Project the XY of start_point straight down onto the mesh surface
+        by finding the triangle whose XY‐projection contains (x_c, y_c)
+        and computing the plane‐interpolated Z.
+        """
+        # unpack XY
+        x_c, y_c, _ = start_point
+
+        # grab a pure-triangle surface
+        surf = self.mesh.extract_surface().triangulate()
+        pts  = surf.points                   # (N_pts, 3)
+        # surf.faces is a flat array: [3, i0, i1, i2, 3, i3, i4, i5, …]
+        tris = surf.faces.reshape(-1, 4)     # (N_tri, 4)
+
+        zs = []
+        # loop over every triangle
+        for tri in tris:
+            if tri[0] != 3:
+                continue
+            i0, i1, i2 = tri[1], tri[2], tri[3]
+            v0, v1, v2 = pts[i0], pts[i1], pts[i2]
+            x0, y0, z0 = v0;  x1, y1, z1 = v1;  x2, y2, z2 = v2
+
+            # compute barycentric coords in XY‐plane
+            denom = (y1 - y2)*(x0 - x2) + (x2 - x1)*(y0 - y2)
+            if abs(denom) < 1e-12:
+                continue  # degenerate triangle in XY
+
+            u = ((y1 - y2)*(x_c - x2) + (x2 - x1)*(y_c - y2)) / denom
+            v = ((y2 - y0)*(x_c - x2) + (x0 - x2)*(y_c - y2)) / denom
+            w = 1.0 - u - v
+
+            # if point lies within (or on) the triangle
+            if u >= -1e-8 and v >= -1e-8 and w >= -1e-8:
+                # interpolate Z
+                z_hit = u*z0 + v*z1 + w*z2
+                zs.append(z_hit)
+
+        if not zs:
+            raise ValueError(
+                f"No vertical intersection found at XY=({x_c:.6f},{y_c:.6f}).\n"
+                "Either your centroid is off the mesh footprint, or the surface\n"
+                "triangulation didn’t catch a triangle overhead."
+            )
+
+        # the “first” hit going downward is the maximum Z among candidates
+        z_max = max(zs)
+        return np.array([x_c, y_c, z_max])
+
 
     def iterate_to_boundary(self, start_point, boundary_points):
        
@@ -293,7 +351,18 @@ class MeshAnalyzer:
         
         return max_distance
 
-    
+    # def compute_volume(self, inside_faces):
+    #     surface = self.mesh.extract_surface()
+    #     region_polydata = surface.extract_cells(list(inside_faces))
+    #     # Create a volumetric mesh from the surface points
+    #     vol_mesh = region_polydata.delaunay_3d()
+    #     volume = vol_mesh.volume
+    #     return volume
+
+
+
+
+
 
 
 class MeshVisualizer:
@@ -420,14 +489,27 @@ class MeshVisualizer:
         inside_faces = analyzer.iterate_to_boundary(start_seed, boundary_pts_2)
         results["Inside Faces"] = inside_faces
 
+        #volume = cvor(mesh,inside_faces,boundary_pts_2 )
+        
+        #dvc(mesh,inside_faces,boundary_pts_2 )
+        #print(f"Volume: {volume*1000000000} m")
+
         geodesic_diameter = analyzer.compute_geodesic_diameter(boundary_pts_2)
         results["Geodesic Diameter"] = geodesic_diameter * 1000  # convert to meters if needed
+        print(f"Geodesic Diameter: {geodesic_diameter * 1000}")
+
         results["Geodesic Radius"] = (geodesic_diameter / 2) * 1000
+        print(f"Geodesic Radius: {geodesic_diameter/2 * 1000}")
 
         angle_deg, depth_m, average_slope = self.compute_depth_angle(inside_faces)
         results["Angle with Horizontal"] = angle_deg
+        print(f"Angle with Horizontal: {angle_deg} degrees")
         results["Depth"] = depth_m
+        print(f"Depth: {depth_m*1000} m")
         results["Average Crater Slope"] = average_slope
+        print(f"Average Crater Slope: {average_slope} degree")
+        # vol = self.analyzer.compute_volume(inside_faces)
+        # print(f"Volume using Pyvista funcion: {vol*1000000000}m")
 
         centroid = analyzer.compute_centroid_of_cells(inside_faces)
         results["Centroid (C)"] = centroid
@@ -459,9 +541,9 @@ class MeshVisualizer:
         delta_xy = np.linalg.norm(delta_xyz[:2])
         angle_deg = np.degrees(np.arctan2(delta_xyz[2], delta_xy)) if delta_xy > 1e-12 else 0.0
         average_slope = self.analyzer.compute_crater_slope(inside_faces, method='average')
+        
 
         return angle_deg, depth, average_slope
-
 
     #-------Method to measure angle & depth from the region's centroid-------------#
     def plot_depth_angle_between_A_B(self, inside_faces):
@@ -524,3 +606,79 @@ class MeshVisualizer:
             crater_slopes.append(slope_deg)
         crater_slopes = np.array(crater_slopes)
         region_polydata.cell_data["Crater_Slope"] = crater_slopes
+
+    def compute_rim_path(self, picked_points):
+        analyzer = self.analyzer
+        mesh     = self.mesh_loader.mesh
+        results  = {}
+
+        # --- old geodesic / intersection logic ---
+        path_vertices = analyzer.compute_geodesic_paths(picked_points)
+        results["Path Keys"] = list(path_vertices.keys())
+
+        point_ids = [mesh.find_closest_point(pt) for pt in picked_points]
+        n = len(point_ids)
+        pair_ac = (point_ids[0], point_ids[n // 2])
+        pair_bd = (point_ids[n // 4], point_ids[(3 * n) // 4])
+
+        if pair_ac in path_vertices and pair_bd in path_vertices:
+            intersection_ac = analyzer.find_path_intersection(
+                path_vertices[pair_ac],
+                path_vertices[pair_bd]
+            )
+        else:
+            intersection_ac = None
+        results["Intersection (AC vs BD)"] = intersection_ac
+
+        # --- trace the true rim boundary via your APBT ---
+        boundary_points, boundary_faces = trace_boundary(mesh, picked_points)
+        results["Boundary Points"] = boundary_points
+
+        # --- pick a start‐seed for flooding & offset it above the surface ---
+        if intersection_ac and len(intersection_ac) > 0:
+            seed = np.array(intersection_ac[0])
+        else:
+            seed = boundary_points[0]
+
+        # nudge up along the normal so that a downward ray will hit the mesh
+        pid0   = mesh.find_closest_point(seed)
+        normal = mesh.point_normals[pid0]
+        seed_above = seed + normal * 1e-3
+
+        inside_faces = analyzer.iterate_to_boundary(seed_above, boundary_points)
+        results["Inside Faces"] = inside_faces
+
+        # --- crater metrics on those faces ---
+        angle_deg, depth_m, avg_slope = self.compute_depth_angle(inside_faces)
+        results["Angle with Horizontal"]   = angle_deg
+        results["Depth"]                   = depth_m
+        results["Average Crater Slope"]    = avg_slope
+
+        centroid = analyzer.compute_centroid_of_cells(inside_faces)
+        results["Centroid (C)"] = centroid
+
+        # --- NEW: irregular‐rim diameter via convex‐hull in 2D ---
+        # 1) PCA‐project into best‐fit plane
+        pca   = PCA(n_components=2)
+        pts2d = pca.fit_transform(boundary_points)
+
+        # 2) convex hull of 2D points
+        hull      = ConvexHull(pts2d)
+        hull_idx  = hull.vertices
+        hull_pts2d = pts2d[hull_idx]
+
+        # 3) pairwise distances → farthest paira
+        D   = cdist(hull_pts2d, hull_pts2d)
+        i, j = np.unravel_index(np.argmax(D), D.shape)
+        diameter2d = D[i, j]
+
+        # 4) map back to 3D endpoints
+        endpt1 = boundary_points[hull_idx[i]]
+        endpt2 = boundary_points[hull_idx[j]]
+
+        results["Geodesic Diameter"]        = diameter2d *1000
+        results["Diameter Endpoints"]  = (endpt1, endpt2)
+        results["Geodesic Radius"]          = diameter2d*1000 / 2.0
+        results['Crater Diameter from the Circle'] = 0
+        return results
+

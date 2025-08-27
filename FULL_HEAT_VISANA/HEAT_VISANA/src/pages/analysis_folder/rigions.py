@@ -13,7 +13,7 @@ dbInsert = db_instance.insert_new_rigion
 filename = "rigions_analysis_functions.py"
 
 search_paths = [
-    "src/pages/analysis_folder",
+    "HEAT_VISANA/src/pages/analysis_folder",
 
 ]
 
@@ -34,11 +34,12 @@ from .rigions_analysis_functions import (
     MeshAnalyzer, 
     MeshVisualizer
 )
+
 class Regions(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.load_css('FULL_HEAT_VISANA/HEAT_VISANA/src/style/analysis.css') 
+        self.load_css('HEAT_VISANA/src/style/analysis.css') 
         print(os.path.abspath('src/style/analysis.css'))
         
         
@@ -88,16 +89,24 @@ class Regions(QWidget):
         self.visualize_button.clicked.connect(self.visualize_angle)
         ana_visu_layout.addWidget(self.visualize_button)
         
-        self.reset_button = QtWidgets.QPushButton("Reset Selection")
+        rest_flip = QtWidgets.QHBoxLayout()
 
+        self.reset_button = QtWidgets.QPushButton("Reset Selection")
         self.reset_button.clicked.connect(self.reset_selection)
+        rest_flip.addWidget(self.reset_button)
+
+        self.flip_z_button = QtWidgets.QPushButton("Flip Z axis")
+        self.flip_z_button.clicked.connect(self.flip_z_axis)
+        
+        rest_flip.addWidget(self.flip_z_button)
+
 
         
 
         controls_layout.addLayout(points_layout)
         controls_layout.addLayout(load_pick_layout)
         controls_layout.addLayout(ana_visu_layout)
-        controls_layout.addWidget(self.reset_button)
+        controls_layout.addLayout(rest_flip)
         
 
         left_layout.addLayout(controls_layout)
@@ -186,6 +195,7 @@ class Regions(QWidget):
         self.analysis_button.setEnabled(False)
         self.visualize_button.setEnabled(False)
         self.reset_button.setEnabled(False)
+        self.flip_z_button.setEnabled(False)
         
 
     def load_mesh(self):
@@ -212,6 +222,7 @@ class Regions(QWidget):
             self.plotter_widget.render()
 
             self.pick_button.setEnabled(True)
+            self.flip_z_button.setEnabled(True)
             self.analysis_button.setEnabled(False)
             self.visualize_button.setEnabled(False)
             self.reset_button.setEnabled(False)
@@ -228,6 +239,7 @@ class Regions(QWidget):
         self.plotter_widget.enable_point_picking(
             callback=self.point_picked,
             use_picker=True,
+            tolerance=0.005,
             show_message=True
         )
     def disable_current_picking(self):
@@ -248,7 +260,9 @@ class Regions(QWidget):
 
     def point_picked(self, point, index):
         self.picked_points.append(point)
-        sphere = pv.Sphere(center=point, radius=0.001)
+        sphere = pv.Sphere(center=point, radius=0.0005, theta_resolution=16,
+                            phi_resolution=16)
+        
         actor = self.plotter_widget.add_mesh(sphere, color="red", reset_camera=False)
         self.picked_point_actors.append(actor)
 
@@ -260,18 +274,55 @@ class Regions(QWidget):
             self.analysis_button.setEnabled(True)
             self.reset_button.setEnabled(True)
 
+    def flip_z_axis(self):
+        # 1. grab the aligned mesh
+        mesh = self.mesh_loader.mesh
+
+        # 2. invert every Z coordinate in place
+        pts = mesh.points
+        pts[:, 2] *= -1
+        mesh.points = pts
+
+        # 3. update your Z‐scalar so the coloring flips too
+        mesh.point_data['Z-Gradient'] = mesh.points[:, 2]
+
+        # 4. re‐draw the mesh in the QtInteractor
+        self.plotter_widget.clear()  
+        self.plotter_widget.add_mesh(
+            mesh,
+            scalars="Z-Gradient",
+            cmap="terrain",
+            opacity=0.8,
+            show_edges=True,
+            reset_camera=True
+        )
+        self.plotter_widget.reset_camera()
+        self.plotter_widget.render()
+
+        # 5. reset any pick/analysis state
+        self.picked_points.clear()
+        for actor in self.picked_point_actors:
+            self.plotter_widget.remove_actor(actor, render=False)
+        self.picked_point_actors.clear()
+        self.point_counter_label.setText(f"Points Picked: 0 / {MeshVisualizer.MAX_PICKS}")
+        self.pick_button.setEnabled(True)
+        self.analysis_button.setEnabled(False)
+        self.visualize_button.setEnabled(False)
+        self.reset_button.setEnabled(False)
+        
     def run_analysis(self):
+        
         if len(self.picked_points) != MeshVisualizer.MAX_PICKS:
             return
         try:
-            results = self.visualizer.run_analysis_without_plotting(self.picked_points)
-            
+            #results = self.visualizer.run_analysis_without_plotting(self.picked_points)
+            results = self.visualizer.compute_rim_path(self.picked_points)
         except Exception as e:
             print("Error during analysis:", e)
             return
         
         self.analysis_results = results
-
+        results['Crater Diameter from the Circle'] = 0
         self.depth_label.setText(f"{results['Depth']*1000:.4f} m")  # adjust if necessary
         self.angle_label.setText(f"{results['Angle with Horizontal']:.2f} degrees")
         self.slope_label.setText(f"{results['Average Crater Slope']:.2f} degrees")
