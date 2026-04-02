@@ -1,0 +1,9 @@
+# pull_data.py の依存関係
+numpy>=1.22.0
+pandas>=1.5.0
+astropy>=5.0
+matplotlib>=3.5.0
+tiledb>=0.25.0
+zarr>=2.14.0
+numcodecs>=0.11.0
+os>=0.1.0
